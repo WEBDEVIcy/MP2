@@ -1,44 +1,49 @@
-import React, {useRef, useEffect} from 'react';
-import {FaSearch} from "react-icons/fa";
+import React, { useState } from 'react';
+import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '../../context.';
-import "./SearchForm.css";
+import './SearchForm.css';
 
 const SearchForm = () => {
-  const {setSearchTerm, setResultTitle} = useGlobalContext();
-  const searchText = useRef('');
+  const { setSearchTerm, setResultTitle } = useGlobalContext();
+  const [searchText, setSearchText] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => searchText.current.focus(), []);
   const handleSubmit = (e) => {
     e.preventDefault();
-    let tempSearchTerm = searchText.current.value.trim();
-    if((tempSearchTerm.replace(/[^\w\s]/gi,"")).length === 0){
-      setSearchTerm("Inuyasha");
-      setResultTitle("Please Enter Something ...");
+    const trimmedSearchText = searchText.trim();
+    if (trimmedSearchText.length === 0) {
+      setSearchTerm('Inuyasha');
+      setResultTitle('Please Enter Something ...');
     } else {
-      setSearchTerm(searchText.current.value);
+      setSearchTerm(trimmedSearchText);
     }
 
-    navigate("/book");
+    navigate('/book');
   };
 
   return (
-    <div className='search-form'>
-      <div className='container'>
-        <div className='search-form-content'>
-          <form className='search-form' onSubmit={handleSubmit}>
-            <div className='search-form-elem flex flex-sb bg-white'>
-              <input type = "text" className='form-control' placeholder='Inuyasha ...' ref = {searchText} />
-              <button type = "submit" className='flex flex-c' onClick={handleSubmit}>
-                <FaSearch className='text-purple' size = {32} />
+    <div className="search-form">
+      <div className="container">
+        <div className="search-form-content">
+          <form className="search-form" onSubmit={handleSubmit}>
+            <div className="search-form-elem flex flex-sb bg-white">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Inuyasha ..."
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+              <button type="submit" className="flex flex-c">
+                <FaSearch className="text-purple" size={32} />
               </button>
             </div>
           </form>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SearchForm
+export default SearchForm;
